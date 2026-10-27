@@ -1,0 +1,24 @@
+[package]
+name = "hector"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.88.0"
+description = "Raster to vector image tracer core"
+license = "MIT"
+
+[lib]
+name = "hector"
+path = "src/lib.rs"
+crate-type = ["cdylib", "rlib"]
+
+[features]
+default = []
+# SVG → PNG rendering (the inverse direction from the tracer). Kept behind a
+# feature so a tracer-only build never links a full SVG rasterizer.
+raster = ["dep:resvg"]
+
+[dependencies]
+image = { version = "=0.25.10", default-features = false, features = ["png", "jpeg"] }
+resvg = { version = "=0.49.0", default-features = false, optional = true }
+thiserror = "=2.0.21"
+wasm-bindgen = "0.2"

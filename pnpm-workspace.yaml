@@ -1,0 +1,9 @@
+packages:
+  - 'packages/**'
+  - '!packages/module/pkg'
+
+minimumReleaseAge: 0
+
+allowBuilds:
+  sharp: false
+  unrs-resolver: false
