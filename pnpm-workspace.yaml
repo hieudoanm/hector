@@ -1,0 +1,12 @@
+packages:
+  - 'packages/**'
+  - '!packages/web/out/**'
+  - '!packages/web/.next/**'
+  - 'crates/vectors-core'
+  - 'crates/vectors-cli'
+
+minimumReleaseAge: 0
+
+allowBuilds:
+  sharp: false
+  unrs-resolver: false

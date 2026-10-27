@@ -1,0 +1,7 @@
+.turbo/
+node_modules/
+zip/
+crates/target/
+
+# macOS
+.DS_Store
