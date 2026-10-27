@@ -1,0 +1,365 @@
+{
+  "schema": 1,
+  "entries": [
+    {
+      "name": "circle",
+      "width": 128,
+      "height": 128,
+      "pixel": {
+        "mae": 2.4618326822916665,
+        "mse": 277.67578125,
+        "rmse": 16.663606489892878,
+        "psnr_db": 23.695423584246775,
+        "max_error": 216.0,
+        "differing_ratio": 0.02752685546875
+      },
+      "perceptual": {
+        "ssim": 0.9569258797440158,
+        "edge_similarity": 0.9797488015655184,
+        "color_error": 4.267327044153008
+      },
+      "complexity": {
+        "paths": 5,
+        "contours": 17,
+        "curves": 10,
+        "lines": 70,
+        "points": 480,
+        "colors": 8,
+        "svg_bytes": 1613
+      },
+      "config": {
+        "colors": 8,
+        "threshold": 128,
+        "simplify_tolerance": 1.0,
+        "bezier_tolerance": 0.5,
+        "min_area": 4,
+        "min_contour_points": 4,
+        "background_index": 0
+      }
+    },
+    {
+      "name": "ellipse",
+      "width": 128,
+      "height": 128,
+      "pixel": {
+        "mae": 1.5724690755208333,
+        "mse": 150.448974609375,
+        "rmse": 12.265764330418834,
+        "psnr_db": 26.356911287320422,
+        "max_error": 184.0,
+        "differing_ratio": 0.0272216796875
+      },
+      "perceptual": {
+        "ssim": 0.9761367974068795,
+        "edge_similarity": 0.9870092026476612,
+        "color_error": 3.0412098537018983
+      },
+      "complexity": {
+        "paths": 3,
+        "contours": 3,
+        "curves": 6,
+        "lines": 14,
+        "points": 352,
+        "colors": 8,
+        "svg_bytes": 704
+      },
+      "config": {
+        "colors": 8,
+        "threshold": 128,
+        "simplify_tolerance": 1.0,
+        "bezier_tolerance": 0.5,
+        "min_area": 4,
+        "min_contour_points": 4,
+        "background_index": 0
+      }
+    },
+    {
+      "name": "letter-o",
+      "width": 128,
+      "height": 128,
+      "pixel": {
+        "mae": 3.6052652994791665,
+        "mse": 371.0838623046875,
+        "rmse": 19.26353711821086,
+        "psnr_db": 22.43608292707259,
+        "max_error": 191.0,
+        "differing_ratio": 0.04876708984375
+      },
+      "perceptual": {
+        "ssim": 0.9593231872134679,
+        "edge_similarity": 0.9707813617237845,
+        "color_error": 6.249372220046021
+      },
+      "complexity": {
+        "paths": 17,
+        "contours": 62,
+        "curves": 10,
+        "lines": 250,
+        "points": 968,
+        "colors": 8,
+        "svg_bytes": 4160
+      },
+      "config": {
+        "colors": 8,
+        "threshold": 128,
+        "simplify_tolerance": 1.0,
+        "bezier_tolerance": 0.5,
+        "min_area": 4,
+        "min_contour_points": 4,
+        "background_index": 0
+      }
+    },
+    {
+      "name": "palette",
+      "width": 128,
+      "height": 128,
+      "pixel": {
+        "mae": 0.0,
+        "mse": 0.0,
+        "rmse": 0.0,
+        "psnr_db": 99.0,
+        "max_error": 0.0,
+        "differing_ratio": 0.0
+      },
+      "perceptual": {
+        "ssim": 1.0,
+        "edge_similarity": 1.0,
+        "color_error": 0.0
+      },
+      "complexity": {
+        "paths": 4,
+        "contours": 4,
+        "curves": 0,
+        "lines": 16,
+        "points": 1232,
+        "colors": 5,
+        "svg_bytes": 497
+      },
+      "config": {
+        "colors": 8,
+        "threshold": 128,
+        "simplify_tolerance": 1.0,
+        "bezier_tolerance": 0.5,
+        "min_area": 4,
+        "min_contour_points": 4,
+        "background_index": 0
+      }
+    },
+    {
+      "name": "ring",
+      "width": 128,
+      "height": 128,
+      "pixel": {
+        "mae": 1.97857666015625,
+        "mse": 152.8781941731771,
+        "rmse": 12.364392187777655,
+        "psnr_db": 26.287348167611448,
+        "max_error": 189.0,
+        "differing_ratio": 0.03741455078125
+      },
+      "perceptual": {
+        "ssim": 0.9679851810694222,
+        "edge_similarity": 0.9855396626670809,
+        "color_error": 3.593586058441865
+      },
+      "complexity": {
+        "paths": 1,
+        "contours": 2,
+        "curves": 11,
+        "lines": 5,
+        "points": 592,
+        "colors": 8,
+        "svg_bytes": 707
+      },
+      "config": {
+        "colors": 8,
+        "threshold": 128,
+        "simplify_tolerance": 1.0,
+        "bezier_tolerance": 0.5,
+        "min_area": 4,
+        "min_contour_points": 4,
+        "background_index": 0
+      }
+    },
+    {
+      "name": "square",
+      "width": 128,
+      "height": 128,
+      "pixel": {
+        "mae": 0.0,
+        "mse": 0.0,
+        "rmse": 0.0,
+        "psnr_db": 99.0,
+        "max_error": 0.0,
+        "differing_ratio": 0.0
+      },
+      "perceptual": {
+        "ssim": 1.0,
+        "edge_similarity": 1.0,
+        "color_error": 0.0
+      },
+      "complexity": {
+        "paths": 1,
+        "contours": 1,
+        "curves": 0,
+        "lines": 4,
+        "points": 352,
+        "colors": 2,
+        "svg_bytes": 230
+      },
+      "config": {
+        "colors": 8,
+        "threshold": 128,
+        "simplify_tolerance": 1.0,
+        "bezier_tolerance": 0.5,
+        "min_area": 4,
+        "min_contour_points": 4,
+        "background_index": 0
+      }
+    },
+    {
+      "name": "star",
+      "width": 128,
+      "height": 128,
+      "pixel": {
+        "mae": 1.72320556640625,
+        "mse": 168.45904541015625,
+        "rmse": 12.979177378021932,
+        "psnr_db": 25.86586025478058,
+        "max_error": 226.0,
+        "differing_ratio": 0.0255126953125
+      },
+      "perceptual": {
+        "ssim": 0.9627054685395796,
+        "edge_similarity": 0.9858170757404818,
+        "color_error": 2.9870069532070627
+      },
+      "complexity": {
+        "paths": 1,
+        "contours": 1,
+        "curves": 8,
+        "lines": 14,
+        "points": 400,
+        "colors": 8,
+        "svg_bytes": 568
+      },
+      "config": {
+        "colors": 8,
+        "threshold": 128,
+        "simplify_tolerance": 1.0,
+        "bezier_tolerance": 0.5,
+        "min_area": 4,
+        "min_contour_points": 4,
+        "background_index": 0
+      }
+    },
+    {
+      "name": "triangle",
+      "width": 128,
+      "height": 128,
+      "pixel": {
+        "mae": 0.6673583984375,
+        "mse": 41.294881184895836,
+        "rmse": 6.426109334962784,
+        "psnr_db": 31.971841399846657,
+        "max_error": 177.0,
+        "differing_ratio": 0.0135498046875
+      },
+      "perceptual": {
+        "ssim": 0.9923676667317941,
+        "edge_similarity": 0.9943128959508579,
+        "color_error": 1.1567990028300799
+      },
+      "complexity": {
+        "paths": 1,
+        "contours": 1,
+        "curves": 0,
+        "lines": 12,
+        "points": 336,
+        "colors": 8,
+        "svg_bytes": 333
+      },
+      "config": {
+        "colors": 8,
+        "threshold": 128,
+        "simplify_tolerance": 1.0,
+        "bezier_tolerance": 0.5,
+        "min_area": 4,
+        "min_contour_points": 4,
+        "background_index": 0
+      }
+    },
+    {
+      "name": "two-color",
+      "width": 128,
+      "height": 128,
+      "pixel": {
+        "mae": 0.0,
+        "mse": 0.0,
+        "rmse": 0.0,
+        "psnr_db": 99.0,
+        "max_error": 0.0,
+        "differing_ratio": 0.0
+      },
+      "perceptual": {
+        "ssim": 1.0,
+        "edge_similarity": 1.0,
+        "color_error": 0.0
+      },
+      "complexity": {
+        "paths": 2,
+        "contours": 2,
+        "curves": 0,
+        "lines": 8,
+        "points": 304,
+        "colors": 3,
+        "svg_bytes": 320
+      },
+      "config": {
+        "colors": 8,
+        "threshold": 128,
+        "simplify_tolerance": 1.0,
+        "bezier_tolerance": 0.5,
+        "min_area": 4,
+        "min_contour_points": 4,
+        "background_index": 0
+      }
+    },
+    {
+      "name": "wave",
+      "width": 128,
+      "height": 128,
+      "pixel": {
+        "mae": 1.3436482747395833,
+        "mse": 101.39097086588542,
+        "rmse": 10.069308360850085,
+        "psnr_db": 28.070810792208725,
+        "max_error": 178.0,
+        "differing_ratio": 0.029541015625
+      },
+      "perceptual": {
+        "ssim": 0.973193088762055,
+        "edge_similarity": 0.9878534394340382,
+        "color_error": 2.5531479255742373
+      },
+      "complexity": {
+        "paths": 5,
+        "contours": 17,
+        "curves": 10,
+        "lines": 70,
+        "points": 552,
+        "colors": 8,
+        "svg_bytes": 1498
+      },
+      "config": {
+        "colors": 8,
+        "threshold": 128,
+        "simplify_tolerance": 1.0,
+        "bezier_tolerance": 0.5,
+        "min_area": 4,
+        "min_contour_points": 4,
+        "background_index": 0
+      }
+    }
+  ]
+}
