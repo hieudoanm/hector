@@ -1,4 +1,5 @@
 import type { FC } from 'react';
+import { useState } from 'react';
 
 type FileListProps = {
   files: File[];
@@ -15,18 +16,47 @@ export const FileList: FC<FileListProps> = ({
   onConvert,
   converting,
 }) => {
+  const [previews, setPreviews] = useState<string[]>([]);
+
+  const generatePreviews = async () => {
+    const urls: string[] = [];
+    for (const file of files) {
+      const url = URL.createObjectURL(file);
+      urls.push(url);
+    }
+    setPreviews(urls);
+  };
+
   return (
     <div className="w-full max-w-xl space-y-3">
       <div className="flex items-center justify-between">
         <p className="text-sm font-medium">
           {files.length} file{files.length > 1 ? 's' : ''} selected
         </p>
-        <button
-          onClick={onClear}
-          className="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200">
-          Clear all
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={generatePreviews}
+            className="cursor-pointer text-sm text-blue-600 hover:text-blue-700">
+            Preview
+          </button>
+          <button
+            onClick={onClear}
+            className="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200">
+            Clear all
+          </button>
+        </div>
       </div>
+      {previews.length > 0 && (
+        <div className="grid grid-cols-2 gap-2">
+          {previews.map((url, index) => (
+            <div
+              key={index}
+              className="flex items-center justify-center rounded border border-gray-200 p-2 dark:border-gray-800">
+              <img src={url} alt={files[index]?.name} className="max-h-32" />
+            </div>
+          ))}
+        </div>
+      )}
       <ul className="divide-y divide-gray-200 rounded-lg border border-gray-200 dark:divide-gray-800 dark:border-gray-800">
         {files.map((file, index) => (
           <li
