@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Vectors</title>
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+    <script>
+      tailwind.config = {
+        darkMode: [
+          'variant',
+          [
+            '@media (prefers-color-scheme: dark) { &:not([data-theme="light"] *) }',
+            '&:is([data-theme="dark"] *)',
+          ],
+        ],
+      };
+    </script>
+    <style>
+      :root {
+        color-scheme: light dark;
+        box-sizing: border-box;
+        padding-top: env(safe-area-inset-top, 0px);
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+      }
+      html {
+        scroll-padding-top: env(safe-area-inset-top, 0px);
+      }
+      body {
+        background: #f8fafc;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme='light']) body {
+          background: #0b1120;
+        }
+      }
+      :root[data-theme='dark'] body {
+        background: #0b1120;
+      }
+      .checker {
+        background-image:
+          linear-gradient(45deg, #cbd5e1 25%, transparent 25%),
+          linear-gradient(-45deg, #cbd5e1 25%, transparent 25%),
+          linear-gradient(45deg, transparent 75%, #cbd5e1 75%),
+          linear-gradient(-45deg, transparent 75%, #cbd5e1 75%);
+        background-size: 16px 16px;
+        background-position:
+          0 0,
+          0 8px,
+          8px -8px,
+          -8px 0;
+        opacity: 0.999;
+      }
+    </style>
+  </head>
+  <body
+    class="min-h-screen text-slate-800 dark:text-slate-100 font-sans antialiased">
+    <main class="mx-auto max-w-3xl px-4 py-10 sm:py-16">
+      <header class="text-center mb-8">
+        <div
+          class="inline-flex items-center gap-2 rounded-full bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 px-3 py-1 text-xs font-medium">
+          PNG → SVG
+        </div>
+        <h1 class="mt-3 text-3xl sm:text-4xl font-bold tracking-tight">
+          Vectors
+        </h1>
+        <p class="mt-2 text-slate-600 dark:text-slate-400">
+          Drop a PNG file below and turn it into a scalable vector graphic.
+        </p>
+      </header>
+
+      <!-- Dropzone -->
+      <section id="dropSection">
+        <label
+          id="dropzone"
+          tabindex="0"
+          for="fileInput"
+          class="flex flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-6 py-14 text-center cursor-pointer transition hover:border-indigo-400 focus:outline-none focus:ring-4 focus:ring-indigo-300/50">
+          <svg
+            class="h-12 w-12 text-indigo-500"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="1.5">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 16V4m0 0L8 8m4-4 4 4M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
+          </svg>
+          <div>
+            <p class="font-semibold text-lg">
+              <span class="text-indigo-600 dark:text-indigo-400"
+                >Click to upload</span
+              >
+              or drag and drop
+            </p>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">
+              PNG files only, up to 10 MB
+            </p>
+          </div>
+          <input
+            id="fileInput"
+            type="file"
+            accept="image/png,.png"
+            class="sr-only" />
+        </label>
+        <p
+          id="error"
+          role="alert"
+          class="hidden mt-3 rounded-lg bg-red-50 dark:bg-red-500/10 text-red-700 dark:text-red-300 px-4 py-2 text-sm"></p>
+      </section>
+
+      <!-- Selected file -->
+      <section
+        id="fileSection"
+        class="hidden rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-5">
+        <div class="flex items-center gap-4">
+          <div
+            class="checker h-20 w-20 shrink-0 overflow-hidden rounded-lg border border-slate-200 dark:border-slate-700">
+            <img
+              id="thumb"
+              alt="Selected PNG preview"
+              class="h-full w-full object-contain" />
+          </div>
+          <div class="min-w-0 flex-1">
+            <p id="fileName" class="truncate font-semibold"></p>
+            <p
+              id="fileMeta"
+              class="text-sm text-slate-500 dark:text-slate-400"></p>
+          </div>
+          <button
+            id="removeBtn"
+            class="rounded-lg px-3 py-2 text-sm text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800"
+            aria-label="Remove file">
+            Remove
+          </button>
+        </div>
+
+        <div id="progressWrap" class="hidden mt-5">
+          <div
+            class="flex justify-between text-xs text-slate-500 dark:text-slate-400 mb-1">
+            <span id="progressLabel">Converting…</span
+            ><span id="progressPct">0%</span>
+          </div>
+          <div
+            class="h-2 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700">
+            <div
+              id="progressBar"
+              class="h-full w-0 rounded-full bg-indigo-500 transition-all duration-150"></div>
+          </div>
+        </div>
+
+        <button
+          id="convertBtn"
+          class="mt-5 w-full rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white shadow hover:bg-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-300/50 disabled:opacity-60 disabled:cursor-not-allowed">
+          Convert to SVG
+        </button>
+      </section>
+
+      <!-- Result -->
+      <section id="resultSection" class="hidden mt-6 space-y-5">
+        <div class="grid gap-4 sm:grid-cols-2">
+          <figure
+            class="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-4">
+            <figcaption
+              class="mb-2 flex items-center justify-between text-sm font-medium">
+              Original PNG
+              <span
+                id="pngSize"
+                class="text-xs font-normal text-slate-500 dark:text-slate-400"></span>
+            </figcaption>
+            <div
+              class="checker flex aspect-square items-center justify-center overflow-hidden rounded-lg">
+              <img
+                id="origImg"
+                alt="Original PNG"
+                class="max-h-full max-w-full object-contain" />
+            </div>
+          </figure>
+          <figure
+            class="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-4">
+            <figcaption
+              class="mb-2 flex items-center justify-between text-sm font-medium">
+              Result SVG
+              <span
+                id="svgSize"
+                class="text-xs font-normal text-slate-500 dark:text-slate-400"></span>
+            </figcaption>
+            <div
+              class="checker flex aspect-square items-center justify-center overflow-hidden rounded-lg">
+              <img
+                id="svgImg"
+                alt="Converted SVG"
+                class="max-h-full max-w-full object-contain" />
+            </div>
+          </figure>
+        </div>
+
+        <div
+          class="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-4">
+          <div class="mb-2 flex items-center justify-between">
+            <h2 class="text-sm font-medium">SVG code</h2>
+            <button
+              id="copyBtn"
+              class="rounded-lg bg-slate-100 dark:bg-slate-800 px-3 py-1.5 text-sm font-medium hover:bg-slate-200 dark:hover:bg-slate-700">
+              Copy
+            </button>
+          </div>
+          <textarea
+            id="svgCode"
+            readonly
+            rows="6"
+            class="w-full resize-y rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-3 font-mono text-xs text-slate-700 dark:text-slate-300"></textarea>
+        </div>
+
+        <button
+          id="againBtn"
+          class="w-full rounded-xl border border-slate-300 dark:border-slate-600 px-5 py-3 font-semibold hover:bg-slate-100 dark:hover:bg-slate-800">
+          Convert another file
+        </button>
+      </section>
+
+      <p class="mt-10 text-center text-xs text-slate-400">
+        Demo only: the conversion is simulated in your browser, and no files are
+        uploaded.
+      </p>
+    </main>
+
+    <script>
+      const $ = (id) => document.getElementById(id);
+      const MAX = 10 * 1024 * 1024;
+      let file = null,
+        dataUrl = '',
+        dims = { w: 0, h: 0 };
+
+      const fmt = (b) =>
+        b < 1024
+          ? b + ' B'
+          : b < 1048576
+            ? (b / 1024).toFixed(1) + ' KB'
+            : (b / 1048576).toFixed(2) + ' MB';
+      const show = (el, on) => el.classList.toggle('hidden', !on);
+      function showError(msg) {
+        $('error').textContent = msg;
+        show($('error'), !!msg);
+      }
+
+      /* ---------- Mock conversion (swap this for a real tracer) ---------- */
+      function mockConvert(dataUrl, w, h, onProgress) {
+        return new Promise((resolve) => {
+          let p = 0;
+          const t = setInterval(() => {
+            p = Math.min(100, p + 4 + Math.random() * 9);
+            onProgress(Math.round(p));
+            if (p >= 100) {
+              clearInterval(t);
+              const svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">\n  <image width="${w}" height="${h}" xlink:href="${dataUrl}"/>\n</svg>`;
+              resolve(svg);
+            }
+          }, 90);
+        });
+      }
+
+      /* ---------- File handling ---------- */
+      function handleFile(f) {
+        showError('');
+        if (!f) return;
+        if (f.type !== 'image/png' && !/\.png$/i.test(f.name))
+          return showError('Please choose a PNG file.');
+        if (f.size > MAX) return showError('That file is larger than 10 MB.');
+        const reader = new FileReader();
+        reader.onload = () => {
+          const img = new Image();
+          img.onload = () => {
+            file = f;
+            dataUrl = reader.result;
+            dims = { w: img.naturalWidth, h: img.naturalHeight };
+            $('thumb').src = dataUrl;
+            $('fileName').textContent = f.name;
+            $('fileMeta').textContent =
+              `${dims.w} × ${dims.h}px · ${fmt(f.size)}`;
+            show($('dropSection'), false);
+            show($('fileSection'), true);
+            show($('resultSection'), false);
+            show($('progressWrap'), false);
+            $('convertBtn').disabled = false;
+            $('convertBtn').textContent = 'Convert to SVG';
+          };
+          img.onerror = () =>
+            showError('That file couldn’t be read as an image.');
+          img.src = reader.result;
+        };
+        reader.onerror = () => showError('Couldn’t read the file.');
+        reader.readAsDataURL(f);
+      }
+
+      function reset() {
+        file = null;
+        dataUrl = '';
+        $('fileInput').value = '';
+        show($('fileSection'), false);
+        show($('resultSection'), false);
+        show($('dropSection'), true);
+        showError('');
+      }
+
+      const dz = $('dropzone');
+      $('fileInput').addEventListener('change', (e) =>
+        handleFile(e.target.files[0])
+      );
+      ['dragenter', 'dragover'].forEach((ev) =>
+        dz.addEventListener(ev, (e) => {
+          e.preventDefault();
+          dz.classList.add(
+            'border-indigo-500',
+            'bg-indigo-50',
+            'dark:bg-indigo-500/10'
+          );
+        })
+      );
+      ['dragleave', 'drop'].forEach((ev) =>
+        dz.addEventListener(ev, (e) => {
+          e.preventDefault();
+          dz.classList.remove(
+            'border-indigo-500',
+            'bg-indigo-50',
+            'dark:bg-indigo-500/10'
+          );
+        })
+      );
+      dz.addEventListener('drop', (e) => handleFile(e.dataTransfer.files[0]));
+      dz.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          $('fileInput').click();
+        }
+      });
+      // Stop the browser opening a PNG dropped outside the zone
+      ['dragover', 'drop'].forEach((ev) =>
+        window.addEventListener(ev, (e) => e.preventDefault())
+      );
+
+      $('removeBtn').addEventListener('click', reset);
+      $('againBtn').addEventListener('click', reset);
+
+      $('convertBtn').addEventListener('click', async () => {
+        if (!file) return;
+        const btn = $('convertBtn');
+        btn.disabled = true;
+        btn.textContent = 'Converting…';
+        show($('progressWrap'), true);
+        const svg = await mockConvert(dataUrl, dims.w, dims.h, (p) => {
+          $('progressBar').style.width = p + '%';
+          $('progressPct').textContent = p + '%';
+        });
+        const blobUrl = URL.createObjectURL(
+          new Blob([svg], { type: 'image/svg+xml' })
+        );
+        $('origImg').src = dataUrl;
+        $('svgImg').src = blobUrl;
+        $('pngSize').textContent = fmt(file.size);
+        $('svgSize').textContent = fmt(new Blob([svg]).size);
+        $('svgCode').value = svg;
+        show($('progressWrap'), false);
+        show($('resultSection'), true);
+        btn.textContent = 'Convert again';
+        btn.disabled = false;
+        $('resultSection').scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+      });
+
+      $('copyBtn').addEventListener('click', async () => {
+        const btn = $('copyBtn');
+        try {
+          await navigator.clipboard.writeText($('svgCode').value);
+        } catch (e) {
+          $('svgCode').select();
+          document.execCommand('copy');
+        }
+        btn.textContent = 'Copied!';
+        setTimeout(() => (btn.textContent = 'Copy'), 1500);
+      });
+    </script>
+  </body>
+</html>
