@@ -1,0 +1,10 @@
+.git
+.gitignore
+target
+docs
+tests
+*.md
+LICENSE
+Makefile
+Dockerfile
+.dockerignore
