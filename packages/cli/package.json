@@ -1,0 +1,25 @@
+{
+  "name": "@hector/cli",
+  "version": "0.0.1",
+  "description": "Hector - CLI",
+  "keywords": [
+    "hector",
+    "cli"
+  ],
+  "author": {
+    "email": "hieu.doan.professional@gmail.com",
+    "name": "Hieu Doan",
+    "url": "https://hieudoanm.github.io"
+  },
+  "license": "MIT",
+  "packageManager": "pnpm@12.15.0",
+  "engines": {
+    "node": "26.12.1"
+  },
+  "scripts": {
+    "lint": "make lint",
+    "test": "make test",
+    "build": "make build",
+    "format": "make format"
+  }
+}
