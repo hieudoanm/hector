@@ -1,0 +1,9 @@
+/* TEAM */
+  Developer: Hieu Doan
+  Site: hector.hieudoan.dev
+
+/* THANKS */
+  Built with Next.js
+
+/* SITE */
+  Last update: 2026-10-27
