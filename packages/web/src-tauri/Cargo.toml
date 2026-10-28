@@ -22,7 +22,7 @@ serde_json = "=1.0.154"
 serde = { version = "=1.0.229", features = ["derive"] }
 log = "=0.4.34"
 tauri = { version = "=2.12.5", features = [] }
-tauri-plugin-dialog = "=2.8.3"
+tauri-plugin-dialog = "=2.8.4"
 hector = { path = "../../module", features = ["eval"] }
 resvg = "=0.49.0"
 base64 = "=0.23.1"
