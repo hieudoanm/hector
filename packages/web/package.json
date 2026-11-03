@@ -17,7 +17,7 @@
   "dependencies": {
     "@tauri-apps/api": "2.12.4",
     "@tauri-apps/plugin-dialog": "2.8.4",
-    "next": "16.4.3",
+    "next": "16.4.4",
     "react": "19.3.1",
     "react-dom": "19.3.1"
   },
@@ -29,7 +29,7 @@
     "@types/react-dom": "19.3.0",
     "autoprefixer": "10.6.2",
     "eslint": "10.14.0",
-    "eslint-config-next": "16.4.3",
+    "eslint-config-next": "16.4.4",
     "postcss": "8.5.32",
     "prettier": "3.9.10",
     "prettier-plugin-tailwindcss": "0.8.1",
