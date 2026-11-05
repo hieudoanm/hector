@@ -65,7 +65,7 @@ jobs:
 
       - name: Publish GitHub Release
         if: github.ref == 'refs/heads/master'
-        uses: softprops/action-gh-release@v3
+        uses: softprops/action-gh-release@v3.0.4
         with:
           tag_name: latest
           name: CLI (latest)
