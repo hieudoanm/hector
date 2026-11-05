@@ -11,63 +11,13 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
 jobs:
-  module-build:
-    name: Module - Build (native + wasm)
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    defaults:
-      run:
-        working-directory: crates/vectors-core
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7.0.1
-
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          components: rustfmt, clippy
-          targets: wasm32-unknown-unknown
-
-      - name: Cache Cargo
-        uses: actions/cache@v6.1.0
-        with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-            crates/target
-          key: ${{ runner.os }}-cargo-module-${{ hashFiles('crates/Cargo.lock') }}
-          restore-keys: ${{ runner.os }}-cargo-module-
-
-      - name: Check Formatting
-        run: cargo fmt --check
-
-      - name: Lint
-        run: cargo clippy --all-targets --all-features -- -D warnings
-
-      - name: Test
-        run: cargo test --locked
-
-      - name: Test (raster)
-        run: cargo test --locked --features raster
-
-      - name: Build WASM
-        run: cargo build --locked --target wasm32-unknown-unknown
-
-      - name: Build WASM (raster)
-        run: cargo build --locked --target wasm32-unknown-unknown --features raster
-
-      - name: Generate wasm-bindgen bindings
-        run: |
-          cargo install wasm-bindgen-cli --version 0.2.130 --locked
-          wasm-bindgen --target web --out-dir pkg ../target/wasm32-unknown-unknown/debug/vectors.wasm
-
-  cli-build:
-    name: CLI - Build
+  cli-release:
+    name: CLI - Publish GitHub Release
     runs-on: ubuntu-latest
     timeout-minutes: 30
     defaults:
@@ -113,9 +63,17 @@ jobs:
           path: crates/target/release/vectors
           if-no-files-found: error
 
+      - name: Publish GitHub Release
+        if: github.ref == 'refs/heads/master'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          name: CLI (latest)
+          body_path: crates/vectors-cli/README.md
+          files: crates/target/release/vectors
+
   web-build:
-    name: Web - Build
-    needs: [module-build]
+    name: Web - Build & Deploy
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -160,15 +118,7 @@ jobs:
           path: packages/web/out
           retention-days: 1
 
-  deploy:
-    name: Deploy to GitHub Pages
-    needs: web-build
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master'
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
       - name: Deploy to GitHub Pages
+        if: github.ref == 'refs/heads/master'
         id: deployment
         uses: actions/deploy-pages@v5.0.1
