@@ -1,13 +1,15 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
+
+const NODE_ENV = process.env.NODE_ENV ?? 'development';
 
 const nextConfig: NextConfig = {
-  output: "export",
-  distDir: "out",
+  output: 'export',
+  basePath: NODE_ENV === 'production' ? '/vectors' : '',
   turbopack: {
     rules: {
-      "*.css": {
-        loaders: ["@tailwindcss/turbopack"],
-        as: "*.css",
+      '*.css': {
+        loaders: ['@tailwindcss/turbopack'],
+        as: '*.css',
       },
     },
   },

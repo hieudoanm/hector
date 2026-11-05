@@ -11,7 +11,9 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   module-build:
@@ -58,6 +60,11 @@ jobs:
 
       - name: Build WASM (raster)
         run: cargo build --locked --target wasm32-unknown-unknown --features raster
+
+      - name: Generate wasm-bindgen bindings
+        run: |
+          cargo install wasm-bindgen-cli --version 0.2.130 --locked
+          wasm-bindgen --target web --out-dir pkg ../target/wasm32-unknown-unknown/debug/vectors.wasm
 
   cli-build:
     name: CLI - Build
@@ -108,6 +115,7 @@ jobs:
 
   web-build:
     name: Web - Build
+    needs: [module-build]
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -143,119 +151,24 @@ jobs:
       - name: Build
         run: pnpm run build
 
-      - name: Upload web out artifact
-        uses: actions/upload-artifact@v7.0.2
+      - name: Disable Jekyll
+        run: touch out/.nojekyll
+
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v5.0.0
         with:
-          name: web-out
           path: packages/web/out
           retention-days: 1
 
-  web-tauri:
-    name: Web - Build Tauri (${{ matrix.os }})
-    needs: [web-build]
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-    runs-on: ${{ matrix.os }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7.0.1
-
-      - name: Set up pnpm
-        uses: pnpm/action-setup@v6.1.1
-        with:
-          version: "12.16.1"
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v7.1.0
-        with:
-          node-version: "26.13.0"
-          cache: "pnpm"
-
-      - name: Set up Rust
-        uses: dtolnay/rust-toolchain@stable
-
-      - name: Cache cargo
-        uses: actions/cache@v6.1.0
-        with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-            packages/web/src-tauri/target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('packages/web/src-tauri/Cargo.lock') }}
-          restore-keys: ${{ runner.os }}-cargo-
-
-      - name: Install Linux dependencies
-        if: matrix.os == 'ubuntu-latest'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf libglib2.0-dev rpm
-
-      - name: Install dependencies
-        working-directory: packages/web
-        run: pnpm install
-
-      - name: Download web out artifact
-        uses: actions/download-artifact@v8.0.2
-        with:
-          name: web-out
-          path: packages/web/out
-
-      - name: Build Tauri
-        working-directory: packages/web
-        run: pnpm run tauri:build
-
-      - name: Upload Tauri bundles
-        uses: actions/upload-artifact@v7.0.2
-        with:
-          name: web-release-${{ matrix.os }}
-          path: packages/web/src-tauri/target/release/bundle
-          retention-days: 1
-
-  release:
-    name: Release
-    needs: [cli-build, web-tauri]
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: web-build
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+    if: github.ref == 'refs/heads/master'
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v7.0.1
-
-      - name: Download CLI artifact
-        uses: actions/download-artifact@v8.0.2
-        with:
-          name: vectors
-          path: artifacts
-
-      - name: Download all Tauri bundles
-        uses: actions/download-artifact@v8.0.2
-        with:
-          pattern: web-release-*
-          merge-multiple: true
-          path: bundles
-
-      - name: Publish Release
-        run: |
-          RELEASE_NAME="vectors-latest"
-          RELEASE_TITLE="vectors (latest)"
-          NOTES_FILE="README.md"
-          RELEASE_NOTES="release-notes.md"
-          {
-            echo "Auto-built from commit ${{ github.sha }}"
-            if [[ -f "$NOTES_FILE" ]]; then
-              echo ""
-              echo "---"
-              echo ""
-              cat "$NOTES_FILE"
-            fi
-          } > "$RELEASE_NOTES"
-          gh release delete "$RELEASE_NAME" --yes --cleanup-tag 2>/dev/null || true
-          gh release create "$RELEASE_NAME" \
-            --title "$RELEASE_TITLE" \
-            --notes-file "$RELEASE_NOTES" \
-            artifacts/vectors
-          find bundles -type f \( -name '*.AppImage' -o -name '*.deb' -o -name '*.rpm' -o -name '*.dmg' -o -name '*.zip' -o -name '*.msi' -o -name '*.exe' \) -exec gh release upload "$RELEASE_NAME" {} --clobber \;
-        env:
-          GH_TOKEN: ${{ github.token }}
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5.0.1
