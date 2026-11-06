@@ -20,7 +20,7 @@
     "url": "https://hieudoanm.github.io"
   },
   "license": "MIT",
-  "packageManager": "pnpm@12.16.1",
+  "packageManager": "pnpm@12.18.0",
   "engines": {
     "node": "26.13.0"
   },
